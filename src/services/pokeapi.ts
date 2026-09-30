@@ -1,33 +1,33 @@
 import type { Pokemon } from "../types/pokemon";
 
 const API_URL = "https://pokeapi.co/api/v2/pokemon";
+const SPRITE_URL =
+    "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon";
 
-export async function getPokemon(id: number): Promise<Pokemon> {
-  const response = await fetch(`${API_URL}/${id}`);
-
-  if (!response.ok) {
-    throw new Error(`No se pudo obtener el Pokemon con id ${id}`);
-  }
-
-  const data = await response.json();
-
-  return {
-    id: data.id,
-    name: data.name,
-    spriteRegular: data.sprites.front_default,
-    spriteShiny: data.sprites.front_shiny,
-  };
+interface PokemonListResponse {
+    results: {
+        name: string;
+        url: string;
+    }[];
 }
 
-export async function getPokemonRange(
-  start: number,
-  end: number,
-): Promise<Pokemon[]> {
-  const requests = [];
+export async function getAllPokemon(): Promise<Pokemon[]> {
+    const response = await fetch(`${API_URL}?limit=1025`);
 
-  for (let id = start; id <= end; id++) {
-    requests.push(getPokemon(id));
-  }
+    if (!response.ok) {
+        throw new Error("No se pudo obtener la lista de Pokémon.");
+    }
 
-  return Promise.all(requests);
+    const data: PokemonListResponse = await response.json();
+
+    return data.results.map((pokemon, index) => {
+        const id = index + 1;
+
+        return {
+            id,
+            name: pokemon.name,
+            spriteRegular: `${SPRITE_URL}/${id}.png`,
+            spriteShiny: `${SPRITE_URL}/shiny/${id}.png`,
+        };
+    });
 }

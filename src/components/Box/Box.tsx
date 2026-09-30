@@ -9,7 +9,7 @@ interface BoxProps {
 export default function Box({ name, pokemon }: BoxProps) {
     return (
         <section>
-            <h2 className="text-sm text-gray-400 uppercase mb-1">
+            <h2 className="text-sm text-red-400 uppercase mb-1">
                 {name}
             </h2>
 
