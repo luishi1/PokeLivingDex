@@ -7,6 +7,7 @@ import { useDexStore } from "./store/dexStore";
 function App() {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
+  const [search , setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
   const capturedCount = useDexStore((state) => state.getCapturedCount());
 
@@ -44,6 +45,18 @@ function App() {
       </div>
     );
   }
+
+const filteredPokemon = search.trim() === ""
+    ? pokemon
+    : pokemon.filter((poke) => {
+        const searchText = search.toLowerCase().trim();
+
+        return (
+            poke.name.toLowerCase().includes(searchText) ||
+            poke.id.toString().includes(searchText)
+        );
+    });
+
 
   return (
     <main className="min-h-screen bg-white text-black">
@@ -96,10 +109,14 @@ function App() {
 
           {/* Herramientas */}
           <div className="flex gap-2 mt-3 mb-3">
+
+            
             <input
               type="text"
               placeholder="🔍 Buscar por # o por nombre..."
               className="border border-gray-300 rounded px-2 py-1 w-64"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             />
 
             <button className="border border-gray-300 rounded px-3 py-1 hover:bg-gray-100">
@@ -119,7 +136,9 @@ function App() {
 
       {/* CAJAS */}
       <section className="max-w-7xl mx-auto px-5 py-5">
-        <BoxGrid pokemon={pokemon} />
+        <BoxGrid 
+          pokemon={filteredPokemon}
+        />
       </section>
     </main>
   );

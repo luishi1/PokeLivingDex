@@ -5,7 +5,7 @@ interface BoxGridProps {
     pokemon: Pokemon[];
 }
 
-export default function BoxGrid({ pokemon }: BoxGridProps) {
+export default function BoxGrid({ pokemon}: BoxGridProps) {
 
     const boxes: Pokemon[][] = [];
 

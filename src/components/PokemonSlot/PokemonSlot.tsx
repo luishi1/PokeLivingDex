@@ -39,7 +39,7 @@ export default function PokemonSlot({ pokemon }: PokemonSlotProps) {
     `}
       />
 
-      <span className="text-xs text-gray-500">
+      <span className="text-xs text-black-500">
         #{String(pokemon.id).padStart(4, "0")}
       </span>
 
