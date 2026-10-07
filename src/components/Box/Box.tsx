@@ -4,11 +4,15 @@ import PokemonSlot from "../PokemonSlot/PokemonSlot";
 interface BoxProps {
     name: string;
     pokemon: Pokemon[];
+    shinyMode: boolean;
+    mixedShiny: Set<number>;
 }
 
 export default function Box({
     name,
     pokemon,
+    shinyMode,
+    mixedShiny
 }: BoxProps) {
 
     return (
@@ -23,6 +27,8 @@ export default function Box({
                     <PokemonSlot
                         key={poke.id}
                         pokemon={poke}
+                        shinyMode={shinyMode}
+                        mixedShiny={mixedShiny}
                     />
                 ))}
 

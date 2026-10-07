@@ -3,12 +3,22 @@ import { useDexStore } from "../../store/dexStore";
 
 interface PokemonSlotProps {
   pokemon: Pokemon;
+  shinyMode: boolean;
+  mixedShiny: Set<number>;
 }
 
-export default function PokemonSlot({ pokemon }: PokemonSlotProps) {
+export default function PokemonSlot({ pokemon, shinyMode, mixedShiny }: PokemonSlotProps) {
   const isCaptured = useDexStore((state) => state.isCaptured(pokemon.id));
-
+  
   const toggleCaptured = useDexStore((state) => state.toggleCaptured);
+
+  const isMixedShiny = mixedShiny.has(pokemon.id);
+
+  const showShiny = shinyMode || isMixedShiny;
+
+  const sprite = showShiny
+    ? pokemon.spriteShiny
+    : pokemon.spriteRegular;
 
   return (
     <button
@@ -29,7 +39,7 @@ export default function PokemonSlot({ pokemon }: PokemonSlotProps) {
     `}
     >
       <img
-        src={pokemon.spriteRegular}
+        src={sprite}
         alt={pokemon.name}
         className={`
         w-20

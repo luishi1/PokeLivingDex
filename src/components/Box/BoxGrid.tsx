@@ -3,9 +3,11 @@ import Box from "./Box";
 
 interface BoxGridProps {
     pokemon: Pokemon[];
+    shinymode: boolean;
+    mixedShiny: Set<number>;
 }
 
-export default function BoxGrid({ pokemon}: BoxGridProps) {
+export default function BoxGrid({ pokemon, shinymode, mixedShiny }: BoxGridProps) {
 
     const boxes: Pokemon[][] = [];
 
@@ -25,6 +27,8 @@ export default function BoxGrid({ pokemon}: BoxGridProps) {
                         key={index}
                         name={`Caja ${start} -${end}`}
                         pokemon={boxPokemon}
+                        shinyMode={shinymode}
+                        mixedShiny={mixedShiny}
                     />
                 );
             })}

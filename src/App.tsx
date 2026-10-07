@@ -8,6 +8,9 @@ function App() {
   const [pokemon, setPokemon] = useState<Pokemon[]>([]);
   const [loading, setLoading] = useState(true);
   const [search , setSearch] = useState("");
+  const [shinyMode , setShinyMode] = useState(false);
+  const [mixedShiny, setMixedShiny] = useState<Set<number>>(new Set());
+  const [mixedMode, setMixedMode] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const capturedCount = useDexStore((state) => state.getCapturedCount());
 
@@ -119,11 +122,48 @@ const filteredPokemon = search.trim() === ""
               onChange={(e) => setSearch(e.target.value)}
             />
 
-            <button className="border border-gray-300 rounded px-3 py-1 hover:bg-gray-100">
-              ☆ Shiny
+            <button
+              onClick={() => setShinyMode(!shinyMode)}
+              className={`
+                border rounded px-3 py-1 transition
+                ${shinyMode
+                    ? "bg-yellow-300 border-yellow-400"
+                    : "border-gray-300 hover:bg-gray-100"
+                  }
+                `}
+            >
+              ✨ Shiny
             </button>
 
-            <button className="border border-gray-300 rounded px-3 py-1 hover:bg-gray-100">
+            <button 
+              onClick = {() =>{
+                if(mixedMode){
+                  setMixedMode(false);
+                  setMixedShiny(new Set());
+                  return;
+                }
+                
+                const newMixedShiny = new Set(mixedShiny);
+
+                const cant = Math.floor(
+                  Math.random() * pokemon.length) +1;
+                
+                while (newMixedShiny.size < cant) {
+                  const randomId = Math.floor(Math.random() * pokemon.length) + 1;
+                  newMixedShiny.add(randomId);
+                }
+
+                setMixedShiny(newMixedShiny);
+                setMixedMode(true);
+              }}
+              className={`
+                border rounded px-3 py-1 transition
+                ${mixedMode
+                    ? "bg-yellow-300 border-yellow-400"
+                    : "border-gray-300 hover:bg-gray-100"
+                }
+              `}
+            >
               ↪ Surtido
             </button>
 
@@ -138,6 +178,8 @@ const filteredPokemon = search.trim() === ""
       <section className="max-w-7xl mx-auto px-5 py-5">
         <BoxGrid 
           pokemon={filteredPokemon}
+          shinymode={shinyMode}
+          mixedShiny={mixedShiny}
         />
       </section>
     </main>
